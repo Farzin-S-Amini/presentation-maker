@@ -20,4 +20,4 @@ if __name__ == '__main__':
                 db.session.commit()
             except Exception as e:
                 print(e)
-    app.run(port=8000, debug=True)
+    app.run(port=8000,debug=True)
