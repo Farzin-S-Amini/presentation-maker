@@ -1,10 +1,12 @@
 import os
 
-from flask import Flask, jsonify,g
+from flask import Flask, jsonify, g
 from flask.ext.sqlalchemy import SQLAlchemy
 from .decorators import json, no_cache, rate_limit
+from flask.ext.mail import Mail
 
 db = SQLAlchemy()
+mail = Mail()
 
 
 def create_app(config_name):
@@ -17,12 +19,13 @@ def create_app(config_name):
 
     # initialize extensions
     db.init_app(app)
+    mail.init_app(app)
 
     # register blueprints
     from .api_v1 import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v1')
 
-     # register an after request handler
+    # register an after request handler
     @app.after_request
     def after_request(rv):
         headers = getattr(g, 'headers', {})

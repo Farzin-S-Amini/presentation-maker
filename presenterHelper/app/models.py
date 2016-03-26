@@ -18,28 +18,30 @@ class User(db.Model):
     def __init__(self, email, password, firstn, lastn, is_audience):
 
         self.email = email
-        self.set_password(password=password)
+        # self.set_password(password=password)
+        self.password_hash = password
         self.firstname = firstn
         self.lastname = lastn
 
-        if (is_audience == True):
+        if is_audience:
             self.is_audience = True
         else:
             self.is_presenter = True
 
     def set_password(self, password):
+
         self.password_hash = generate_password_hash(password)
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def send_email_verification(self):
+        return None
+
     def generate_auth_token(self, expires_in=3600):
 
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expires_in)
         return s.dumps({'user_id': self.user_id}).decode('utf-8')
-
-        def send_email_verification(self):
-            return None
 
     @staticmethod
     def verify_auth_token(token):
@@ -50,5 +52,20 @@ class User(db.Model):
             return None
         return User.query.get(data['user_id'])
 
+    def generate_confirmation_token(self, expiration=36000):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'confirm': self.user_id}).decode('utf-8')
+
+    @staticmethod
+    def verify_register_confirm_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except Exception as e:
+            return None
+        print(data)
+        user = User.query.get(data['confirm'])
+        return user
+
     def __repr__(self):
-        return '<User %r>' % self.firstname + " " + self.lastname
+        return '<User {}>'.format(self.firstname + " " + self.lastname)
