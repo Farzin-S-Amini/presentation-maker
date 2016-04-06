@@ -1,5 +1,5 @@
 from flask import Blueprint
-
+from .. import current_app as app
 api = Blueprint('api', __name__)
 
 @api.before_request
@@ -14,4 +14,4 @@ def after_request(rv):
     return rv
 
 
-from . import users
+from . import users_routes,events

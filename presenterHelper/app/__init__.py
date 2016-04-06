@@ -1,12 +1,54 @@
 import os
 
-from flask import Flask, jsonify, g,current_app
+from flask import Flask, jsonify, g, current_app
 from flask.ext.sqlalchemy import SQLAlchemy
 from .decorators import json, no_cache, rate_limit
 from flask.ext.mail import Mail
+from flask_socketio import SocketIO
+
+# Set this variable to "threading", "eventlet" or "gevent" to test the
+# different async modes, or leave it set to None for the application to choose
+# the best option based on available packages.
+
+async_mode = None
+
+if async_mode is None:
+    try:
+        import eventlet
+
+        async_mode = 'eventlet'
+    except ImportError:
+        pass
+
+    if async_mode is None:
+        try:
+            from gevent import monkey
+
+            async_mode = 'gevent'
+        except ImportError:
+            pass
+
+    if async_mode is None:
+        async_mode = 'threading'
+
+    print('async_mode is ' + async_mode)
+
+# monkey patching is necessary because this application uses a background
+# thread
+if async_mode == 'eventlet':
+    import eventlet
+
+    eventlet.monkey_patch()
+elif async_mode == 'gevent':
+    from gevent import monkey
+
+    monkey.patch_all()
+
+thread = None
 
 db = SQLAlchemy()
 mail = Mail()
+socketio = SocketIO(async_mode=async_mode)
 
 
 def create_app(config_name):
@@ -41,6 +83,8 @@ def create_app(config_name):
     @json
     def get_auth_token():
         return {'token': g.user.generate_auth_token()}
+
+    socketio.init_app(app)
 
     return app
 
