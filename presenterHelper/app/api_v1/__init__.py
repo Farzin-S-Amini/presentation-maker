@@ -2,7 +2,6 @@ from flask import Blueprint
 
 api = Blueprint('api', __name__)
 
-
 @api.before_request
 def before_request():
     """All routes in this blueprint require authentication."""

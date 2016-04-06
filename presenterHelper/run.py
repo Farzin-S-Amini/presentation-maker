@@ -1,6 +1,6 @@
 import os
-from app.models import User
 from app import create_app, db
+from app.models import User
 from flask import current_app
 
 if __name__ == '__main__':
