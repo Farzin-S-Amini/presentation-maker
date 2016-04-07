@@ -9,7 +9,7 @@ SECRET_KEY = 'top-secret!'
 
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:farzin@localhost/presentDb'
 
-
+DATA_DIR = '/home/webapp_user/data'
 
 MAIL_SERVER = 'smtp.googlemail.com'
 MAIL_PORT = 587

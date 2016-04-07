@@ -1,9 +1,9 @@
 from .. import socketio
-
+from . import app
 from flask import session, request
 from flask_socketio import emit, join_room, leave_room, \
     close_room, rooms, disconnect
-
+import os
 
 @socketio.on('connect', namespace='/test')
 def test_connect():
@@ -16,11 +16,13 @@ def test_disconnect():
 
 
 @socketio.on('update presentation', namespace='/test')
-def update_presentation():
-
-    print()
-
-
+def update_presentation(json,user_id,presentation_id):
+    dir = os.path.join(app.config['DATA_DIR'], "user_"+str(user_id))
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    file = open(dir+"/presentation_"+str(presentation_id), 'w')
+    file.write(json)
+    file.close()
 
 
 
