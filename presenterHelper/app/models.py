@@ -1,10 +1,11 @@
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app
-
+from flask import current_app,url_for
+from .exceptions import ValidationError
 
 class User(db.Model):
+    __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), index=True)
     password_hash = db.Column(db.String(128))
@@ -14,6 +15,8 @@ class User(db.Model):
     is_audience = db.Column(db.Boolean(), default=False)
     is_presenter = db.Column(db.Boolean(), default=False)
     is_verified = db.Column(db.Boolean(), default=False)
+
+    presentations = db.relationship('Presentation', backref='user', lazy='dynamic')
 
     def __init__(self, email, password, firstn, lastn, is_audience):
 
@@ -69,3 +72,18 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.firstname + " " + self.lastname)
+class Presentation(db.Model):
+    __tablename__ = 'presentations'
+    id=db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(64),index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'),
+                            index=True)
+    def get_url(self):
+        return url_for('api.get_presentation', id=self.id, _external=True)
+    def import_data(self, data):
+        try:
+            # print(data)
+            self.name = data['name']
+        except KeyError as e:
+            raise ValidationError('Invalid customer: missing ' + e.args[0])
+        return self
