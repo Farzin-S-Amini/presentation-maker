@@ -1,7 +1,9 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-# db_path = os.path.join(basedir, '../data-dev.sqlite')
+print(basedir)
+
+file_path =  os.path.join(basedir, '../webapp_user/data')
 
 DEBUG = True
 IGNORE_AUTH = True
@@ -10,7 +12,7 @@ SECRET_KEY = 'top-secret!'
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:farzin@localhost/presentDb'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
-DATA_DIR = '/home/webapp_user/data'
+DATA_DIR = file_path
 
 MAIL_SERVER = 'smtp.googlemail.com'
 MAIL_PORT = 587
