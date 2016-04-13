@@ -21,8 +21,7 @@ class User(db.Model):
     def __init__(self, email, password, firstn, lastn, is_audience):
 
         self.email = email
-        # self.set_password(password=password)
-        self.password_hash = password
+        self.set_password(password=password)
         self.firstname = firstn
         self.lastname = lastn
 

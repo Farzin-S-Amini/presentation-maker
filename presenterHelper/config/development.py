@@ -8,6 +8,7 @@ IGNORE_AUTH = True
 SECRET_KEY = 'top-secret!'
 
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:farzin@localhost/presentDb'
+SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 DATA_DIR = '/home/webapp_user/data'
 
