@@ -53,7 +53,10 @@ socketio = SocketIO(async_mode=async_mode)
 
 def create_app(config_name):
     """Create an application instance."""
+    from flask.ext.cors import CORS
+
     app = Flask(__name__)
+    CORS(app)
 
     # apply configuration
     cfg = os.path.join(os.getcwd(), 'config', config_name + '.py')
