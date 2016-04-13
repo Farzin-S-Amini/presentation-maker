@@ -5,7 +5,7 @@ from flask import current_app,url_for
 from .exceptions import ValidationError
 
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
     user_id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), index=True)
     password_hash = db.Column(db.String(128))
@@ -76,7 +76,7 @@ class Presentation(db.Model):
     __tablename__ = 'presentations'
     id=db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(64),index=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'),
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'),
                             index=True)
     def get_url(self):
         return url_for('api.get_presentation', id=self.id, _external=True)

@@ -13,7 +13,7 @@ def before_request():
 
 
 @api.after_request
-@etag
+#@etag
 def after_request(rv):
     """Generate an ETag header for all routes in this blueprint."""
     return rv

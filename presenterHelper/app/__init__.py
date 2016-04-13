@@ -5,6 +5,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from .decorators import json, no_cache, rate_limit
 from flask.ext.mail import Mail
 from flask_socketio import SocketIO
+from flask.ext.cors import CORS
 
 # Set this variable to "threading", "eventlet" or "gevent" to test the
 # different async modes, or leave it set to None for the application to choose
@@ -54,7 +55,7 @@ socketio = SocketIO(async_mode=async_mode)
 def create_app(config_name):
     """Create an application instance."""
     app = Flask(__name__)
-
+    CORS(app)
     # apply configuration
     cfg = os.path.join(os.getcwd(), 'config', config_name + '.py')
     app.config.from_pyfile(cfg)
