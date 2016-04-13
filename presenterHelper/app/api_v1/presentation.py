@@ -4,9 +4,9 @@ from . import api
 from . import app
 from .. import db
 from flask import jsonify, request,g
-import json as js
 import os
 from ..decorators import json
+import json as js
 from ..models import User,Presentation
 
 @api.route('/users/<int:id>/create_presentation/', methods=['POST'])
@@ -37,3 +37,17 @@ def get_presentation(id):
                         'message': 'please send your authentication token'})
     except IOError:
         return {"error":"the presentation not found"},404
+class C:pass
+
+@api.route('/users/<int:id>/get_all_presentations/', methods=['GET'])
+def get_all_presentations(id):
+    dir = os.path.join(app.config['DATA_DIR'], "user_"+str(id))
+    allSreens = os.listdir(dir)
+    presentations = list()
+    for i in allSreens:
+        file = open(dir+'/'+i)
+        presentations.append(js.load(file))
+    c= C()
+    c.list = presentations
+    result = js.dumps(c.__dict__)
+    return result
