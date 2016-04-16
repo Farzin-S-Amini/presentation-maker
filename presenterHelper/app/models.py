@@ -1,8 +1,9 @@
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app,url_for
+from flask import current_app, url_for
 from .exceptions import ValidationError
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -37,9 +38,6 @@ class User(db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def send_email_verification(self):
-        return None
-
     def generate_auth_token(self, expires_in=3600):
 
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expires_in)
@@ -69,16 +67,35 @@ class User(db.Model):
         user = User.query.get(data['confirm'])
         return user
 
+    def generate_email_token(self, expiration=36000):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'email': self.email}).decode('utf-8')
+
+    @staticmethod
+    def verify_email_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except Exception as e:
+            return None
+        print(data)
+        user = User.query.filter_by(email=data['email']).first()
+        return user
+
     def __repr__(self):
         return '<User {}>'.format(self.firstname + " " + self.lastname)
+
+
 class Presentation(db.Model):
     __tablename__ = 'presentations'
-    id=db.Column(db.Integer,primary_key=True)
-    name = db.Column(db.String(64),index=True)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'),
-                            index=True)
+                        index=True)
+
     def get_url(self):
         return url_for('api.get_presentation', id=self.id, _external=True)
+
     def import_data(self, data):
         try:
             # print(data)
