@@ -5,7 +5,6 @@ from app import socketio
 
 if __name__ == '__main__':
 
-
     app = create_app(os.environ.get('FLASK_CONFIG', 'development'))
 
     with app.app_context():
@@ -24,6 +23,4 @@ if __name__ == '__main__':
             except Exception as e:
                 print(e)
 
-
-
-    socketio.run(app,port=8000, debug=True)
+    socketio.run(app, port=8000, debug=True)

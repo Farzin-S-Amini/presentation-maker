@@ -9,10 +9,10 @@ import os
 @socketio.on('update presentation', namespace='/test')
 def update_presentation(json, user_id, presentation_id):
     try:
-        dir = os.path.join(app.config['DATA_DIR'], "user_" + str(user_id))
-        if not os.path.exists(dir):
-            os.mkdir(dir)
-        file = open(dir + "/presentation_" + str(presentation_id), 'w')
+        directory = os.path.join(app.config['DATA_DIR'], "user_" + str(user_id))
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+        file = open(directory + "/presentation_" + str(presentation_id), 'w')
         file.write(json)
         file.close()
         print('file saved in server')
