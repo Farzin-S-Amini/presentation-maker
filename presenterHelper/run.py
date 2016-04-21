@@ -16,6 +16,7 @@ if __name__ == '__main__':
 
             # parameters : email, password_hash, firstn, lastn, is_audience
             admin = User('admin@yahoo.com', '1234', 'admin', 'adminzade', True)
+            admin.is_verified = True;
 
             try:
                 db.session.add(admin)

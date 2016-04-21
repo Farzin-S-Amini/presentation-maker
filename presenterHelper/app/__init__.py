@@ -75,7 +75,6 @@ def create_app(config_name):
         rv.headers.extend(headers)
         return rv
 
-
     """
  @api {get} /get-auth-token authenticate in server
  @apiName Log in
@@ -88,26 +87,23 @@ def create_app(config_name):
   @apiSuccessExample {json} Success-Response:
                    {"token": "eyJhbGciOiJIUzI1NiIsImlhdCI6MTQ2"}
 
- @apiError {json} -200 userNotExist
- @apiErrorExample {json} -200 Error-Response:
+ @apiError {json} 404 userNotExist
+ @apiErrorExample {json} 404 Error-Response:
  {
-    'status': -200,
     'error': 'userNotExist'
     'message': 'please sign up'
  }
 
- @apiError {json} -201 userNotVerified
- @apiErrorExample {json} -201 Error-Response:
+ @apiError {json} 403 userNotVerified
+ @apiErrorExample {json} 403 Error-Response:
  {
-    'status': -201,
     'error': 'userNotVerified',
     'message': 'please verify your email account'
  }
 
- @apiError {json} -202 wrongPassword
- @apiErrorExample {json} -202 Error-Response:
+ @apiError {json} 400 wrongPassword
+ @apiErrorExample {json} 400 Error-Response:
  {
-    'status': -202,
     'error': 'wrongPassword',
     'message': 'The password is not correct'
  }

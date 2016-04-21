@@ -23,18 +23,15 @@ def verify_password(username, password):
 @auth.error_handler
 def unauthorized():
     if g.hasUser is False:
-        response = jsonify({'status': -200, 'error': 'userNotExist',
-                            'message': 'please sign up'})
-        return response
-    if g.isVerified is False:
-        response = jsonify({'status': -201, 'error': 'userNotVerified',
-                            'message': 'please verify your email account'})
-        return response
+        return jsonify({'error': 'userNotExist', 'message': 'please sign up'}), 404
 
-    response = jsonify({'status': -202, 'error': 'wrongPassword',
-                        'message': 'The password is not correct'})
-    response.status_code = -202
-    return response
+    if g.isVerified is False:
+        return jsonify({'error': 'userNotVerified',
+                        'message': 'please verify your email account'}), 403
+
+    return jsonify({'error': 'wrongPassword',
+                    'message': 'The password is not correct'}), 400
+
 
 
 @auth_token.verify_password
@@ -48,7 +45,10 @@ def verify_auth_token(token, unused):
 
 @auth_token.error_handler
 def unauthorized_token():
-    response = jsonify({'status': 401, 'error': 'unauthorized',
-                        'message': 'please send your authentication token'})
-    response.status_code = 401
-    return response
+    return jsonify({'error': 'unauthorized',
+                    'message': 'please send your authentication token'}), 401
+
+    # response = jsonify({'status': 401, 'error': 'unauthorized',
+    #                     'message': 'please send your authentication token'})
+    # response.status_code = 401
+    # return response

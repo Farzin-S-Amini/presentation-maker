@@ -70,8 +70,8 @@ def register():
         # this method should be modified
         send_email(user.email, 'register confirmation',
                    "http://localhost:8000/api/v1/register_confirm/" + str(token), None)
-        print('registeration confirmation email sent')
-        return jsonify({'msg': 'a confirmation message sent to user email  :  ' + str(token)}), 201
+        print('registeration confirmation email sent  ' + str(token))
+        return jsonify({'msg': 'a confirmation message sent to user email'}), 201
     except Exception as e:
         print(e)
         return jsonify({'error': 'problem with sending email'}), 401
@@ -128,8 +128,8 @@ def forget_password(email):
         # this method should be modified
         send_email(email, 'forgot password',
                    "a link to change password page in client/" + str(token), None)
-        print('forgot password email sent')
-        return jsonify({'msg': 'change password link has been send to your email  :  ' + str(token)}), 201
+        print('forgot password email sent : ' + str(token))
+        return jsonify({'msg': 'change password link has been send to your email'}), 201
     except Exception as e:
         print(e)
         return jsonify({'error': 'problem with sending email'}), 406

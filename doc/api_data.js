@@ -295,39 +295,39 @@ define({ "api": [
             "group": "Error 4xx",
             "type": "json",
             "optional": false,
-            "field": "-200",
+            "field": "404",
             "description": "<p>userNotExist</p>"
           },
           {
             "group": "Error 4xx",
             "type": "json",
             "optional": false,
-            "field": "-201",
+            "field": "403",
             "description": "<p>userNotVerified</p>"
           },
           {
             "group": "Error 4xx",
             "type": "json",
             "optional": false,
-            "field": "-202",
+            "field": "400",
             "description": "<p>wrongPassword</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "-200 Error-Response:",
-          "content": "{\n   'status': -200,\n   'error': 'userNotExist'\n   'message': 'please sign up'\n}",
+          "title": "404 Error-Response:",
+          "content": "{\n   'error': 'userNotExist'\n   'message': 'please sign up'\n}",
           "type": "json"
         },
         {
-          "title": "-201 Error-Response:",
-          "content": "{\n   'status': -201,\n   'error': 'userNotVerified',\n   'message': 'please verify your email account'\n}",
+          "title": "403 Error-Response:",
+          "content": "{\n   'error': 'userNotVerified',\n   'message': 'please verify your email account'\n}",
           "type": "json"
         },
         {
-          "title": "-202 Error-Response:",
-          "content": "{\n   'status': -202,\n   'error': 'wrongPassword',\n   'message': 'The password is not correct'\n}",
+          "title": "400 Error-Response:",
+          "content": "{\n   'error': 'wrongPassword',\n   'message': 'The password is not correct'\n}",
           "type": "json"
         }
       ]
@@ -501,8 +501,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./doc/main.js",
-    "group": "_home_farzin_presentationProject_git_presentation_maker_doc_main_js",
-    "groupTitle": "_home_farzin_presentationProject_git_presentation_maker_doc_main_js",
+    "group": "_home_ehsangolshani_Projects_SE2_Project_doc_main_js",
+    "groupTitle": "_home_ehsangolshani_Projects_SE2_Project_doc_main_js",
     "name": ""
   }
 ] });
