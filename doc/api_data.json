@@ -10,17 +10,17 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
+            "type": "String",
             "optional": false,
-            "field": "id",
-            "description": "<p>User unique ID.</p>"
+            "field": "name",
+            "description": "<p>presentation name.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n   \"name\": \"new presentation\"\n}",
+          "content": "{\n   \"name\": \"presentation name\"\n}",
           "type": "json"
         }
       ]
@@ -32,11 +32,25 @@
             "group": "Success 200",
             "type": "json",
             "optional": false,
-            "field": "presentationLocation",
-            "description": "<p>the location of new presentation in server</p>"
+            "field": "successMessage",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "201",
+            "description": "<p>message presentation creation message</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "201 Success-Response:",
+          "content": "{\n   'msg': 'presentation created'\n}",
+          "type": "json"
+        }
+      ]
     },
     "error": {
       "fields": {
@@ -58,7 +72,7 @@
   {
     "type": "get",
     "url": "/users/:id/get_all_presentations/",
-    "title": "Request Presentation with id",
+    "title": "Request all presentations of a user",
     "name": "GetAllPresentations",
     "group": "Presentation",
     "parameter": {
@@ -85,7 +99,14 @@
             "description": "<p>a list of presentations in json format</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"list\": [{\"presentation1\": \"file\"},{\"presentation2\":\"file2\"}]}",
+          "type": "json"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "./presenterHelper/app/api_v1/presentation.py",
@@ -160,31 +181,11 @@
     "groupTitle": "Presentation"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/forget-password/:email",
     "title": "respond to forget password request",
     "name": "ForgetPassword",
     "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "string",
-            "optional": false,
-            "field": "email",
-            "description": "<p>of the user</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "{\n   \"email\": \"ehsanroman74@gmail.com\"\n}",
-          "type": "json"
-        }
-      ]
-    },
     "success": {
       "fields": {
         "Success 200": [
@@ -193,7 +194,7 @@
             "type": "json",
             "optional": false,
             "field": "201",
-            "description": "<p>message forgot message confirmation message</p>"
+            "description": "<p>forgot message confirmation message</p>"
           }
         ]
       },
@@ -238,7 +239,101 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./presenterHelper/app/api_v1/users_routes.py",
+    "filename": "./presenterHelper/app/api_v1/users.py",
+    "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/get-auth-token",
+    "title": "authenticate in server",
+    "name": "Log_in",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>username</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>password</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>a long string is returned as a token</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"token\": \"eyJhbGciOiJIUzI1NiIsImlhdCI6MTQ2\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "-200",
+            "description": "<p>userNotExist</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "-201",
+            "description": "<p>userNotVerified</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "-202",
+            "description": "<p>wrongPassword</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "-200 Error-Response:",
+          "content": "{\n   'status': -200,\n   'error': 'userNotExist'\n   'message': 'please sign up'\n}",
+          "type": "json"
+        },
+        {
+          "title": "-201 Error-Response:",
+          "content": "{\n   'status': -201,\n   'error': 'userNotVerified',\n   'message': 'please verify your email account'\n}",
+          "type": "json"
+        },
+        {
+          "title": "-202 Error-Response:",
+          "content": "{\n   'status': -202,\n   'error': 'wrongPassword',\n   'message': 'The password is not correct'\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./presenterHelper/app/__init__.py",
     "groupTitle": "User"
   },
   {
@@ -309,7 +404,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./presenterHelper/app/api_v1/users_routes.py",
+    "filename": "./presenterHelper/app/api_v1/users.py",
     "groupTitle": "User"
   },
   {
@@ -325,8 +420,8 @@
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "a",
-            "description": "<p>token that came from server and is used to find email in server.</p>"
+            "field": "password",
+            "description": "<p>new password</p>"
           }
         ]
       },
@@ -346,7 +441,7 @@
             "type": "json",
             "optional": false,
             "field": "202",
-            "description": "<p>message change user password confirmation message</p>"
+            "description": "<p>change user password confirmation message</p>"
           }
         ]
       },
@@ -379,7 +474,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./presenterHelper/app/api_v1/users_routes.py",
+    "filename": "./presenterHelper/app/api_v1/users.py",
     "groupTitle": "User"
   },
   {
@@ -406,8 +501,8 @@
     "url": "",
     "version": "0.0.0",
     "filename": "./doc/main.js",
-    "group": "_home_ehsangolshani_Projects_interactive_presentation_doc_main_js",
-    "groupTitle": "_home_ehsangolshani_Projects_interactive_presentation_doc_main_js",
+    "group": "_home_farzin_presentationProject_git_presentation_maker_doc_main_js",
+    "groupTitle": "_home_farzin_presentationProject_git_presentation_maker_doc_main_js",
     "name": ""
   }
 ]

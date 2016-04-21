@@ -6,7 +6,7 @@ print(basedir)
 file_path = os.path.join(basedir, '../webapp_user/data')
 
 DEBUG = True
-IGNORE_AUTH = True
+IGNORE_AUTH = False
 SECRET_KEY = 'top-secret!'
 
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:farzin@localhost/presentDb'

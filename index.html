@@ -38,7 +38,7 @@
             // these send data to the server in a variety of ways
 
             $('#save-to-file').click(function (event) {
-                socket.emit('update presentation', 'this is going to save in server files', 1, 1, function (res) {
+                socket.emit('update presentation', '{"this is going to save in server files":"file"}', 3, 2, function (res) {
                     if (res == 0) {
                         console.log("file not saved");
                     } else if (res == 1) {

@@ -6,20 +6,26 @@ import os
 from ..decorators import json
 import json as js
 from ..models import User, Presentation
+from ..auth import auth_token
 
 """
  @api {post} /users/:id/create_presentation/ Request to create a presentation
  @apiName CreatePresentation
  @apiGroup Presentation
 
- @apiParam {Number} id User unique ID.
+ @apiParam {String} name presentation name.
 
  @apiParamExample {json} Request-Example:
  {
-    "name": "new presentation"
+    "name": "presentation name"
  }
 
- @apiSuccess {json} presentationLocation the location of new presentation in server
+ @apiSuccess {json} successMessage
+ @apiSuccess {json} 201 message presentation creation message
+ @apiSuccessExample {json} 201 Success-Response:
+ {
+    'msg': 'presentation created'
+ }
 
  @apiError {json} 404 the User not found
 
@@ -27,17 +33,17 @@ from ..models import User, Presentation
 
 
 @api.route('/users/<int:id>/create_presentation/', methods=['POST'])
+@auth_token.login_required
 @json
 def create_presentation(id):
     req_data = request.json
     temp = req_data["name"]
-    print(temp)
     user = User.query.get_or_404(id)
     presentation = Presentation(user=user)
     presentation.import_data(req_data)
     db.session.add(presentation)
     db.session.commit()
-    return {'Location': presentation.get_url()}, 201
+    return {'msg': 'presentation created'}, 201
 
 
 """
@@ -64,6 +70,7 @@ def create_presentation(id):
 
 
 @api.route('/get_presentation/<int:id>', methods=['GET'])
+@auth_token.login_required
 @json
 def get_presentation(id):
     try:
@@ -83,7 +90,7 @@ class C:
 
 
 """
- @api {get} /users/:id/get_all_presentations/ Request Presentation with id
+ @api {get} /users/:id/get_all_presentations/ Request all presentations of a user
  @apiName GetAllPresentations
  @apiGroup Presentation
 
@@ -91,9 +98,11 @@ class C:
 
  @apiSuccess {json} presentationList a list of presentations in json format
 
+ @apiSuccessExample {json} Success-Response:
+                   {"list": [{"presentation1": "file"},{"presentation2":"file2"}]}
 """
 
-
+@auth_token.login_required
 @api.route('/users/<int:id>/get_all_presentations/', methods=['GET'])
 def get_all_presentations(id):
     directory = os.path.join(app.config['DATA_DIR'], "user_" + str(id))

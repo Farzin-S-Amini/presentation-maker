@@ -1,6 +1,5 @@
 from flask import Blueprint
 from .. import current_app as app
-from ..auth import auth_token
 from ..decorators import etag, rate_limit
 
 api = Blueprint('api', __name__)
@@ -8,7 +7,6 @@ api = Blueprint('api', __name__)
 
 @api.before_request
 @rate_limit(limit=5, period=15)
-@auth_token.login_required
 def before_request():
     """All routes in this blueprint require authentication."""
     pass
@@ -21,4 +19,4 @@ def after_request(rv):
     return rv
 
 
-from . import users_routes, events, presentation
+from . import users, events, presentation

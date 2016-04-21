@@ -75,6 +75,43 @@ def create_app(config_name):
         rv.headers.extend(headers)
         return rv
 
+
+    """
+ @api {get} /get-auth-token authenticate in server
+ @apiName Log in
+ @apiGroup User
+
+ @apiParam {String} username username
+ @apiParam {String} password password
+
+ @apiSuccess {String} token a long string is returned as a token
+  @apiSuccessExample {json} Success-Response:
+                   {"token": "eyJhbGciOiJIUzI1NiIsImlhdCI6MTQ2"}
+
+ @apiError {json} -200 userNotExist
+ @apiErrorExample {json} -200 Error-Response:
+ {
+    'status': -200,
+    'error': 'userNotExist'
+    'message': 'please sign up'
+ }
+
+ @apiError {json} -201 userNotVerified
+ @apiErrorExample {json} -201 Error-Response:
+ {
+    'status': -201,
+    'error': 'userNotVerified',
+    'message': 'please verify your email account'
+ }
+
+ @apiError {json} -202 wrongPassword
+ @apiErrorExample {json} -202 Error-Response:
+ {
+    'status': -202,
+    'error': 'wrongPassword',
+    'message': 'The password is not correct'
+ }
+"""
     # authentication token route
     from .auth import auth
     @app.route('/get-auth-token')
