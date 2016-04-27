@@ -9,7 +9,7 @@ from ..models import User, Presentation
 from ..auth import auth_token
 
 """
- @api {post} /users/:id/create_presentation/ Request to create a presentation
+ @api {post} git/create_presentation/ Request to create a presentation
  @apiName CreatePresentation
  @apiGroup Presentation
 
@@ -32,18 +32,19 @@ from ..auth import auth_token
 """
 
 
-@api.route('/users/<int:id>/create_presentation/', methods=['POST'])
+@api.route('/create_presentation', methods=['POST'])
 @auth_token.login_required
 @json
-def create_presentation(id):
-    req_data = request.json
-    temp = req_data["name"]
-    user = User.query.get_or_404(id)
-    presentation = Presentation(user=user)
-    presentation.import_data(req_data)
-    db.session.add(presentation)
-    db.session.commit()
-    return {'msg': 'presentation created'}, 201
+def create_presentation():
+    if g.user:
+        req_data = request.json
+        user_id = g.user.user_id
+        user = User.query.get_or_404(user_id)
+        presentation = Presentation(user=user)
+        presentation.import_data(req_data)
+        db.session.add(presentation)
+        db.session.commit()
+        return {'msg': 'presentation created'}, 201
 
 
 """

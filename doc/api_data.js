@@ -1,7 +1,7 @@
 define({ "api": [
   {
     "type": "post",
-    "url": "/users/:id/create_presentation/",
+    "url": "/create_presentation/",
     "title": "Request to create a presentation",
     "name": "CreatePresentation",
     "group": "Presentation",
