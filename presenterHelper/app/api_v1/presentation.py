@@ -90,11 +90,9 @@ class C:
 
 
 """
- @api {get} /users/:id/get_all_presentations/ Request all presentations of a user
+ @api {get} /get_all_presentations/ Request all presentations of a user
  @apiName GetAllPresentations
  @apiGroup Presentation
-
- @apiParam {Number} id User unique ID.
 
  @apiSuccess {json} presentationList a list of presentations in json format
 
@@ -102,16 +100,20 @@ class C:
                    {"list": [{"presentation1": "file"},{"presentation2":"file2"}]}
 """
 
+@api.route('/get_all_presentations/', methods=['GET'])
 @auth_token.login_required
-@api.route('/users/<int:id>/get_all_presentations/', methods=['GET'])
-def get_all_presentations(id):
-    directory = os.path.join(app.config['DATA_DIR'], "user_" + str(id))
-    all_presentations = os.listdir(directory)
-    presentations = list()
-    for i in all_presentations:
-        file = open(directory + '/' + i)
-        presentations.append(js.load(file))
-    c = C()
-    c.list = presentations
-    result = js.dumps(c.__dict__)
-    return result
+def get_all_presentations():
+    if g.user:
+        user_id = g.user.user_id
+        directory = os.path.join(app.config['DATA_DIR'], "user_" + str(user_id))
+        all_presentations = os.listdir(directory)
+        presentations = list()
+        for i in all_presentations:
+            file = open(directory + '/' + i)
+            presentations.append(js.load(file))
+        c = C()
+        c.list = presentations
+        result = js.dumps(c.__dict__)
+        return result
+    else:
+        return {'error': 'unauthorized'}, 401

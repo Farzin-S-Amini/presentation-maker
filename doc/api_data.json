@@ -71,23 +71,10 @@
   },
   {
     "type": "get",
-    "url": "/users/:id/get_all_presentations/",
+    "url": "/get_all_presentations/",
     "title": "Request all presentations of a user",
     "name": "GetAllPresentations",
     "group": "Presentation",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>User unique ID.</p>"
-          }
-        ]
-      }
-    },
     "success": {
       "fields": {
         "Success 200": [
@@ -501,8 +488,8 @@
     "url": "",
     "version": "0.0.0",
     "filename": "./doc/main.js",
-    "group": "_home_ehsangolshani_Projects_SE2_Project_doc_main_js",
-    "groupTitle": "_home_ehsangolshani_Projects_SE2_Project_doc_main_js",
+    "group": "_home_farzin_presentationProject_git_presentation_maker_doc_main_js",
+    "groupTitle": "_home_farzin_presentationProject_git_presentation_maker_doc_main_js",
     "name": ""
   }
 ]
