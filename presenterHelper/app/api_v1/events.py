@@ -32,6 +32,12 @@ def test_disconnect():
     print('Client disconnected')
 
 
+@socketio.on('save image', namespace='/test')
+def save_image(message):
+    print(message['data'])
+    emit('my response', {'data': message['data'], 'count': 0})
+
+
 @socketio.on('my event', namespace='/test')
 def test_message(message):
     session['receive_count'] = session.get('receive_count', 0) + 1

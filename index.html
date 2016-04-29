@@ -21,6 +21,27 @@
             }
 
 
+            function getBase64FromImageUrl(url) {
+                var img = new Image();
+
+                img.setAttribute('crossOrigin', 'anonymous');
+
+                img.src = url;
+
+                img.onload = function () {
+                    var canvas = document.createElement("canvas");
+                    canvas.width = this.width;
+                    canvas.height = this.height;
+
+                    var ctx = canvas.getContext("2d");
+                    ctx.drawImage(this, 0, 0);
+//                  "image/png"
+                    var dataURL = canvas.toDataURL();
+                    socket.emit('save image', {data: dataURL});
+                }
+            }
+
+
             // event handler for server sent data
             // the data is displayed in the "Received" section of the page
             socket.on('my response', function (msg) {
@@ -32,6 +53,13 @@
             socket.on('connect', function (msg) {
                 console.log('connected')
                 socket.emit('my event', {data: 'I\'m connected!'});
+            });
+
+
+            $('#send-img').click(function (event) {
+                getBase64FromImageUrl("coliseum-wallpaper.jpg");
+                //socket.emit('save image', {data: getBase64FromImageUrl("coliseum-wallpaper.jpg")});
+                return false;
             });
 
             // handlers for the different forms in the page
@@ -81,7 +109,10 @@
 <body>
 <h1>Flask-SocketIO Test</h1>
 <h2>Send:</h2>
+<img id="image1" src="coliseum-wallpaper.jpg" alt="" style="height: 200px;width: 500px;">
+<img id="image2" src="Screenshot%20from%202016-04-20%2013-03-26.png" alt="" style="height: 200px;width: 500px;"><br>
 <button id="save-to-file">save to server files</button>
+<button id="send-img">save img</button>
 <form id="emit" method="POST" action='#'>
     <input type="text" name="emit_data" id="emit_data" placeholder="Message">
     <input type="submit" value="Echo">
