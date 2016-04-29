@@ -6,7 +6,9 @@ import os
 from ..decorators import json
 import json as js
 from ..models import User, Presentation
+from ..objectModels.PresentationModel import PresentationModel
 from ..auth import auth_token
+
 
 """
  @api {post} git/create_presentation/ Request to create a presentation
@@ -26,6 +28,7 @@ from ..auth import auth_token
  {
     'msg': 'presentation created'
  }
+
 
  @apiError {json} 404 the User not found
 
@@ -70,24 +73,20 @@ def create_presentation():
 """
 
 
-@api.route('/get_presentation/<int:id>', methods=['GET'])
+@api.route('/get_presentation/<int:pid>', methods=['GET'])
 @auth_token.login_required
 @json
-def get_presentation(id):
+def get_presentation(pid):
     try:
         if g.user:
             directory = os.path.join(app.config['DATA_DIR'], "user_" + str(g.user.user_id))
-            file = open(directory + "/presentation_" + str(id))
+            file = open(directory + "/presentation_" + str(pid))
             presentation = js.load(file)
             return presentation
         else:
             return {'error': 'unauthorized'}, 401
     except IOError:
         return {"error": "the presentation not found"}, 404
-
-
-class C:
-    pass
 
 
 """
@@ -98,7 +97,7 @@ class C:
  @apiSuccess {json} presentationList a list of presentations in json format
 
  @apiSuccessExample {json} Success-Response:
-                   {"list": [{"presentation1": "file"},{"presentation2":"file2"}]}
+                   [{"id": 2, "name": "software engineering"}, {"id": 3, "name": "pres1"}]
 """
 
 @api.route('/get_all_presentations/', methods=['GET'])
@@ -106,15 +105,25 @@ class C:
 def get_all_presentations():
     if g.user:
         user_id = g.user.user_id
-        directory = os.path.join(app.config['DATA_DIR'], "user_" + str(user_id))
-        all_presentations = os.listdir(directory)
-        presentations = list()
-        for i in all_presentations:
-            file = open(directory + '/' + i)
-            presentations.append(js.load(file))
-        c = C()
-        c.list = presentations
-        result = js.dumps(c.__dict__)
-        return result
+        user = User.query.get_or_404(user_id)
+        p_list = list()
+        for u in user.presentations:
+            p = PresentationModel(u.id, u.name)
+            p_list.append(p)
+        json_string = js.dumps([ob.__dict__ for ob in p_list])
+        print(json_string)
+        return json_string
     else:
         return {'error': 'unauthorized'}, 401
+    #
+    #     directory = os.path.join(app.config['DATA_DIR'], "user_" + str(user_id))
+    #     all_presentations = os.listdir(directory)
+    #     presentations = list()
+    #     for i in all_presentations:
+    #         file = open(directory + '/' + i)
+    #         presentations.append(js.load(file))
+    #     c = C()
+    #     c.list = presentations
+    #     result = js.dumps(c.__dict__)
+    #     return result
+

@@ -1,7 +1,7 @@
 [
   {
     "type": "post",
-    "url": "/create_presentation/",
+    "url": "git/create_presentation/",
     "title": "Request to create a presentation",
     "name": "CreatePresentation",
     "group": "Presentation",
@@ -90,7 +90,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\"list\": [{\"presentation1\": \"file\"},{\"presentation2\":\"file2\"}]}",
+          "content": "[{\"id\": 2, \"name\": \"software engineering\"}, {\"id\": 3, \"name\": \"pres1\"}]",
           "type": "json"
         }
       ]
@@ -463,6 +463,121 @@
     "version": "0.0.0",
     "filename": "./presenterHelper/app/api_v1/users.py",
     "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/delete_image/image_name",
+    "title": "Delete image",
+    "name": "delete_image",
+    "group": "Utils",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "imageName",
+            "description": "<p>name of image</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"msg\": \"image deleted successfully\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "404",
+            "description": "<p>the image not found</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "404 Error-Response:",
+          "content": "{\n   \"error\": \"the image not found\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./presenterHelper/app/api_v1/utils.py",
+    "groupTitle": "Utils"
+  },
+  {
+    "type": "post",
+    "url": "/upload",
+    "title": "Upload photo",
+    "name": "upload_photo",
+    "group": "Utils",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "imageFile",
+            "description": "<p>Any image of .png, .jpg or .jpeg format</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "filename",
+            "description": "<p>the name of file in server is returned</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\"filename\": \"10630a4e-0156-4734-8855-e01fd172173d.png\"}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "406",
+            "description": "<p>the file format not supported</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "406 Error-Response:",
+          "content": "{\n   \"error\": \"file type not supported\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./presenterHelper/app/api_v1/utils.py",
+    "groupTitle": "Utils"
   },
   {
     "success": {

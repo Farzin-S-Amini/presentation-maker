@@ -4,6 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 print(basedir)
 
 file_path = os.path.join(basedir, '../webapp_user/data')
+upload_path = os.path.join(basedir, '../webapp_user/data')
 
 DEBUG = True
 IGNORE_AUTH = False
@@ -14,6 +15,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 DATA_DIR = file_path
 
+ALLOWED_EXTENSIONS = set([ '.png', '.jpg', '.jpeg'])
 
 # after signing in google you should go to below link and allow google to work with less secure apps :
 # http://www.google.com/settings/security/lesssecureapps

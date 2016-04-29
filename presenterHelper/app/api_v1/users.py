@@ -1,7 +1,7 @@
 from . import api
 from ..models import User
 from .. import db
-from flask import jsonify, request
+from flask import jsonify, request, redirect
 from ..email import send_email
 
 
@@ -85,7 +85,7 @@ def register_confirm(token):
     db.session.commit()
 
     # user should be redirected to login page in client
-    return jsonify({'msg': 'user registration confirmed'}), 202
+    return redirect("file:///home/farzin/Desktop/SE-Front/rgs.html", code=302)
 
 
 """
@@ -127,7 +127,7 @@ def forget_password(email):
     try:
         # this method should be modified
         send_email(email, 'forgot password',
-                   "a link to change password page in client/" + str(token), None)
+                   "file:///home/farzin/Desktop/SE-Front/updatepass.html" + str(token), None)
         print('forgot password email sent : ' + str(token))
         return jsonify({'msg': 'change password link has been send to your email'}), 201
     except Exception as e:
