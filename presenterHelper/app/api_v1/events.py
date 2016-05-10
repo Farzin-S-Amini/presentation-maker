@@ -4,7 +4,14 @@ from flask import session, request
 from flask_socketio import emit, join_room, leave_room, \
     close_room, rooms, disconnect
 import os
+from io import StringIO
+from io import BytesIO
+import re
+from PIL import Image
+import uuid
+import base64
 
+import json as js
 
 @socketio.on('update presentation', namespace='/test')
 def update_presentation(json, user_id, presentation_id):
@@ -22,6 +29,7 @@ def update_presentation(json, user_id, presentation_id):
         return 0
 
 
+
 @socketio.on('connect', namespace='/test')
 def test_connect():
     emit('my response', {'data': 'Connected', 'count': 0})
@@ -34,8 +42,15 @@ def test_disconnect():
 
 @socketio.on('save image', namespace='/test')
 def save_image(message):
-    print(message['data'])
-    emit('my response', {'data': message['data'], 'count': 0})
+    image_data = re.sub('^data:image/png;base64,', '', message['data'])
+    image = Image.open(BytesIO(base64.b64decode(image_data)))
+    if image:
+        f_name = str(uuid.uuid4()) + ".png"
+        directory = os.path.join(app.config['DATA_DIR'], "user_" + str(1))
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+        image.save(os.path.join(directory, f_name))
+        emit('my response', {'data': f_name})
 
 
 @socketio.on('my event', namespace='/test')
