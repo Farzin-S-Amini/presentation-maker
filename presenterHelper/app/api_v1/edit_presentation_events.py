@@ -42,7 +42,8 @@ def save_image(message):
         if not os.path.exists(directory):
             os.mkdir(directory)
         image.save(os.path.join(directory, f_name))
-        emit('my response', {'data': f_name})
+        return {'data': f_name}
+        # emit('my response', {'data': f_name})
 
 
 #########################################################################################################

@@ -10,17 +10,20 @@
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
 
+            ///////////////////////////socket initialization
             try {
                 console.log("yess1");
-                var socket = io.connect('http://localhost:8000/test');
+                var socket = io.connect('http://localhost:8000/edit_presentation');
 
                 console.log("yess2");
             }
             catch (err) {
                 console.log(err);
             }
+            ///////////////////////////socket initialization
 
 
+            //make base64-encode using canvas
             function getBase64FromImageUrl(url) {
                 var img = new Image();
 
@@ -41,20 +44,41 @@
                 }
             }
 
+            //make base64-encode using FileReader
+            function getBase64Code(input) {
+                var fReader = new FileReader();
+                fReader.readAsDataURL(input.files[0]);
+                fReader.onloadend = function (event) {
+                    input.src = event.target.result;
+                    alert(input.src);
 
-            // event handler for server sent data
-            // the data is displayed in the "Received" section of the page
+                    socket.emit('save image', {data: input.src}, function (response) {
+                        //you should use response.data to get url of saved image :)
+                        alert(response.data);
+                        return response.data;
+                    });
+                }
+            }
+
+            ///////////////////////////socket event listeners
             socket.on('my response', function (msg) {
-                console.log('yesssss')
-                $('#log').append('<br>' + $('<div/>').text('Received #' + msg.count + ': ' + msg.data).html());
+                console.log('yesssss');
+                $('#log').append('<br>' + $('<div/>').text('Received #' + msg.data).html());
             });
 
             // event handler for new connections
             socket.on('connect', function (msg) {
-                console.log('connected')
+                console.log('connected');
                 socket.emit('my event', {data: 'I\'m connected!'});
             });
+            ///////////////////////////socket event listeners
 
+            $('#inp').change(function () {
+                var inp = $('#inp')[0];
+                var x = getBase64Code(inp);
+                alert(x);
+                return false;
+            });
 
             $('#send-img').click(function (event) {
                 getBase64FromImageUrl("coliseum-wallpaper.jpg");
@@ -66,7 +90,21 @@
             // these send data to the server in a variety of ways
 
             $('#save-to-file').click(function (event) {
-                socket.emit('update presentation', '{"this is going to save in server files":"file"}', 3, 2, function (res) {
+
+                var json = {
+                    "list": [
+                        {
+                            "a": "a",
+                            "b": "b"
+                        },
+                        {
+                            "c": "c",
+                            "d": "d"
+                        }
+                    ]
+                };
+
+                socket.emit('update presentation', JSON.stringify([]), 3, 2, function (res) {
                     if (res == 0) {
                         console.log("file not saved");
                     } else if (res == 1) {
@@ -75,6 +113,7 @@
                 });
             })
 
+            //////////////////////////////////////////////////////////////////////////////
             $('form#emit').submit(function (event) {
                 socket.emit('my event', {data: $('#emit_data').val()});
                 return false;
@@ -103,16 +142,20 @@
                 socket.emit('disconnect request');
                 return false;
             });
+            //////////////////////////////////////////////////////////////////////////////
         });
     </script>
 </head>
 <body>
+
+
 <h1>Flask-SocketIO Test</h1>
 <h2>Send:</h2>
 <img id="image1" src="coliseum-wallpaper.jpg" alt="" style="height: 200px;width: 500px;">
 <img id="image2" src="Screenshot%20from%202016-04-20%2013-03-26.png" alt="" style="height: 200px;width: 500px;"><br>
 <button id="save-to-file">save to server files</button>
 <button id="send-img">save img</button>
+<input id="inp" type="file">
 <form id="emit" method="POST" action='#'>
     <input type="text" name="emit_data" id="emit_data" placeholder="Message">
     <input type="submit" value="Echo">
