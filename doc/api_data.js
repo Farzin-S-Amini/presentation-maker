@@ -603,8 +603,8 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./doc/main.js",
-    "group": "_home_farzin_presentationProject_git_presentation_maker_doc_main_js",
-    "groupTitle": "_home_farzin_presentationProject_git_presentation_maker_doc_main_js",
+    "group": "_home_farzin_seProject_presentation_maker_doc_main_js",
+    "groupTitle": "_home_farzin_seProject_presentation_maker_doc_main_js",
     "name": ""
   }
 ] });
