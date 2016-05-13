@@ -26,7 +26,7 @@ from ..auth import auth_token
  @apiSuccess {json} 201 message presentation creation message
  @apiSuccessExample {json} 201 Success-Response:
  {
-    'msg': 'presentation created'
+    'presentation_id': 2
  }
 
 
@@ -46,9 +46,10 @@ def create_presentation():
         presentation = Presentation(user=user)
         presentation.import_data(req_data)
         db.session.add(presentation)
+        db.session.flush()
         db.session.commit()
-        return {'msg': 'presentation created'}, 201
-
+        return {'presentation_id': presentation.id}, 201
+    
 
 """
  @api {get} /get_presentation/:id Request Presentation with id
