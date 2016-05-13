@@ -19,4 +19,4 @@ def after_request(rv):
     return rv
 
 
-from . import users, presentation,utils, edit_presentation_events,presentation_events,presenter_page_events
+from . import users, presentation, utils, edit_presentation_events, presentation_events, presenter_page_events, session

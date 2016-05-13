@@ -2,8 +2,9 @@ from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, url_for
+from sqlalchemy.orm import relationship
 from .exceptions import ValidationError
-
+import datetime
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -12,6 +13,9 @@ class User(db.Model):
     password_hash = db.Column(db.String(128))
     firstname = db.Column(db.String(64))
     lastname = db.Column(db.String(64))
+    sessions = relationship(
+        'Session',
+        secondary='session_user_link')
 
     is_audience = db.Column(db.Boolean(), default=False)
     is_presenter = db.Column(db.Boolean(), default=False)
@@ -93,6 +97,8 @@ class Presentation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'),
                         index=True)
 
+    sessions = db.relationship('Session', backref='presentation', lazy='dynamic')
+
     def get_url(self):
         return url_for('api.get_presentation', id=self.id, _external=True)
 
@@ -103,3 +109,33 @@ class Presentation(db.Model):
         except KeyError as e:
             raise ValidationError('Invalid customer: missing ' + e.args[0])
         return self
+
+class Session(db.Model):
+    __tablename__ = 'sessions'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, nullable=True)
+    presentation_id = db.Column(db.Integer, db.ForeignKey('presentations.id'))
+    presenter_id = db.Column(db.Integer)
+    code = db.Column(db.String(32), index=True)
+    is_active = db.Column(db.BOOLEAN, default=True)
+    start_date = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
+    participants = relationship(
+        'User',
+        secondary='session_user_link')
+
+    def import_data(self, data,presenter_id,code):
+        try:
+            self.presenter_id = presenter_id
+            self.code = code
+            self.is_active = True
+            self.start_date = datetime.datetime.now()
+        except KeyError as e:
+            raise ValidationError('Invalid customer: missing ' + e.args[0])
+        return self
+
+
+class SessionUserLink(db.Model):
+    __tablename__ = 'session_user_link'
+    session_id = db.Column(db.Integer, db.ForeignKey('sessions.id'), primary_key=True)
+    participant_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)

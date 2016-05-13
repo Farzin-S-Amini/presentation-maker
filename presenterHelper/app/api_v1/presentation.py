@@ -49,7 +49,7 @@ def create_presentation():
         db.session.flush()
         db.session.commit()
         return {'presentation_id': presentation.id}, 201
-    
+
 
 """
  @api {get} /get_presentation/:id Request Presentation with id
