@@ -3,7 +3,7 @@ __author__ = 'farzin.amini@gmail.com'
 from . import api
 from .. import db
 from ..auth import auth_token
-from ..models import Presentation, Session
+from ..models import Presentation, Session, User
 from ..decorators import json
 from flask import g, request
 import string, random
@@ -68,3 +68,42 @@ def is_code_unique(code):
         if code == i.code:
             return False
     return True
+
+
+"""
+ @api {post} /join_session/ Request to join a session
+ @apiName JoinSession
+ @apiGroup Session
+
+ @apiParam {String} code session code.
+
+ @apiParamExample {json} Request-Example:
+ {
+    "code" : "WX1RQ"
+ }
+
+ @apiSuccess {json} 201 message session joined successfully
+ @apiSuccessExample {json} 201 Success-Response:
+ {
+    'message': 'participant joined successfully'
+ }
+
+
+ @apiError {json} 404 the User not found
+
+"""
+
+
+@api.route("/join_session", methods=["POST"])
+@auth_token.login_required
+@json
+def join_session():
+    if g.user:
+        req_data = request.json
+        user_id = g.user.user_id
+        user = User.query.get_or_404(user_id)
+        session_code = req_data['code']
+        session = Session.query.filter_by(is_active=True, code=session_code).first()
+        session.participants.append(user)
+        db.session.commit()
+        return {'message': 'participant joined successfully'}, 201

@@ -47,7 +47,7 @@
       "examples": [
         {
           "title": "201 Success-Response:",
-          "content": "{\n   'msg': 'presentation created'\n}",
+          "content": "{\n   'presentation_id': 2\n}",
           "type": "json"
         }
       ]
@@ -166,6 +166,139 @@
     "version": "0.0.0",
     "filename": "./presenterHelper/app/api_v1/presentation.py",
     "groupTitle": "Presentation"
+  },
+  {
+    "type": "post",
+    "url": "/create_session/",
+    "title": "Request to create a session",
+    "name": "CreateSession",
+    "group": "Session",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pid",
+            "description": "<p>presentation id.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n   \"pid\" : \"2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "successMessage",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "201",
+            "description": "<p>message presentation creation message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "201 Success-Response:",
+          "content": "{\n   'presentation_id': 2\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "404",
+            "description": "<p>the User not found</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./presenterHelper/app/api_v1/session.py",
+    "groupTitle": "Session"
+  },
+  {
+    "type": "post",
+    "url": "/join_session/",
+    "title": "Request to join a session",
+    "name": "JoinSession",
+    "group": "Session",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>session code.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n   \"code\" : \"WX1RQ\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "201",
+            "description": "<p>message session joined successfully</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "201 Success-Response:",
+          "content": "{\n   'message': 'participant joined successfully'\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "json",
+            "optional": false,
+            "field": "404",
+            "description": "<p>the User not found</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./presenterHelper/app/api_v1/session.py",
+    "groupTitle": "Session"
   },
   {
     "type": "get",
