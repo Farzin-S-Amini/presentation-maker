@@ -21,11 +21,11 @@ import string, random
     "pid" : "2"
  }
 
- @apiSuccess {json} successMessage
- @apiSuccess {json} 201 message presentation creation message
- @apiSuccessExample {json} 201 Success-Response:
+
+ @apiSuccess {json} session_code session entrance code
+ @apiSuccessExample {json} 200 Success-Response:
  {
-    'presentation_id': 2
+    'session_code': 'W2GSA'
  }
 
 
@@ -47,7 +47,7 @@ def create_session():
         session.import_data(req_data, pid, code)
         db.session.add(session)
         db.session.commit()
-        return {'session_code': code}, 201
+        return {'session_code': code}, 200
 
 
 def generate_session_code():

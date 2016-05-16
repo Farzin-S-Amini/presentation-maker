@@ -200,22 +200,15 @@ define({ "api": [
             "group": "Success 200",
             "type": "json",
             "optional": false,
-            "field": "successMessage",
-            "description": ""
-          },
-          {
-            "group": "Success 200",
-            "type": "json",
-            "optional": false,
-            "field": "201",
-            "description": "<p>message presentation creation message</p>"
+            "field": "session_code",
+            "description": "<p>session entrance code</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "201 Success-Response:",
-          "content": "{\n   'presentation_id': 2\n}",
+          "title": "200 Success-Response:",
+          "content": "{\n   'session_code': 'W2GSA'\n}",
           "type": "json"
         }
       ]
