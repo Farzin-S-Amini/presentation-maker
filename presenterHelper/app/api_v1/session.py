@@ -51,7 +51,6 @@ def create_session():
 
 
 def generate_session_code():
-    #sessions = Session.query.filter_by(is_active=True).all()
     size = 5
     chars = string.ascii_uppercase + string.digits
     code = ""

@@ -2,23 +2,33 @@
 
 from .. import socketio
 from . import app
-from flask import session, request
+from ..models import Session
+from .. import db
+import json as js
+import os
+from flask import session
 from flask_socketio import emit, join_room, leave_room, \
     close_room, rooms, disconnect
 
 
 @socketio.on('change page', namespace='/presentation')
-def change_page(data):
+def change_page(data, room_name):
     print(data['page'])
-    emit('page changed', {'page': data['page']}, broadcast=True)
+    session = Session.query.filter_by(code=room_name, is_active=True)
+    session.current_page = data['page']
+    db.session.commit()
+    emit('page changed', {'page': data['page']}, room=room_name)
 
 
 @socketio.on('end session', namespace='/presentation')
-def end_session():
+def end_session(room_name):
     try:
-        # do what is needed in server when the session in ending
+        session = Session.query.filter_by(code=room_name, is_active=True)
+        session.is_active = False
+        db.session.commit()
+
         print("session ended")
-        emit('session ended', broadcast=True)
+        emit('session ended', room=room_name)
         return 1
     except Exception as e:
         print(e)
@@ -50,8 +60,20 @@ def test_broadcast_message(message):
 
 @socketio.on('join', namespace='/presentation')
 def join(message):
-    join_room(message['room'])
-    emit('my response', {'data': 'In rooms: ' + ', '.join(rooms())})
+    try:
+        # get presentation json file using room
+        session = Session.query.filter_by(code=message['room'], is_active=True).first()
+        pid = session.presentation.id
+        user_id = session.presenter_id
+        page_number = session.current_page
+        directory = os.path.join(app.config['DATA_DIR'], "user_" + str(user_id))
+        file = open(directory + "/presentation_" + str(pid))
+        presentation_file = js.load(file)
+        join_room(message['room'])
+        emit('init presentation', {"json": presentation_file, "page": page_number})
+        return 1
+    except Exception as e:
+        return 0
 
 
 @socketio.on('leave', namespace='/presentation')
