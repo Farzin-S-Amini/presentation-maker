@@ -1,1 +1,49 @@
-{"this is going to save in server files":"ds"}
+{
+  "slides": [
+    {
+      "id": 0,
+      "title": "",
+      "tmp": 3,
+      "imageUrl": "",
+      "videoUrl": "",
+      "hyperText": "hi",
+      "listItems": [
+        "1",
+        "a",
+        null,
+        "b"
+      ],
+      "listItemsNum": 3
+    },
+    {
+      "id": 1,
+      "title": "",
+      "tmp": 3,
+      "imageUrl": "",
+      "videoUrl": "",
+      "hyperText": "hi2",
+      "listItems": [
+        "1",
+        "a",
+        null,
+        "b"
+      ],
+      "listItemsNum": 3
+    },
+    {
+      "id": 2,
+      "title": "",
+      "tmp": 3,
+      "imageUrl": "",
+      "videoUrl": "",
+      "hyperText": "hi3",
+      "listItems": [
+        "1",
+        "a",
+        null,
+        "b"
+      ],
+      "listItemsNum": 3
+    }
+  ]
+}

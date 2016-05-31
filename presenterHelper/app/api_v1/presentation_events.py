@@ -39,7 +39,7 @@ def end_session(room_name):
 
 @socketio.on('connect', namespace='/presentation')
 def test_connect():
-    emit('my response', {'data': 'Connected'})
+    emit('my response', {'data': 'Connected'},)
 
 
 @socketio.on('disconnect', namespace='/presentation')
@@ -62,18 +62,28 @@ def test_broadcast_message(message):
 def join(message):
     try:
         # get presentation json file using room
-        session = Session.query.filter_by(code=message['room'], is_active=True).first()
-        pid = session.presentation.id
-        user_id = session.presenter_id
-        page_number = session.current_page
-        directory = os.path.join(app.config['DATA_DIR'], "user_" + str(user_id))
-        file = open(directory + "/presentation_" + str(pid))
-        presentation_file = js.load(file)
+        # session = Session.query.filter_by(code=message['room'], is_active=True).first()
+        # pid = session.presentation.id
+        # user_id = session.presenter_id
+        # page_number = session.current_page
+        # directory = os.path.join(app.config['DATA_DIR'], "user_" + str(user_id))
+        # file = open(directory + "/presentation_" + str(pid))
+        # presentation_file = js.load(file)
         join_room(message['room'])
-        emit('init presentation', {"json": presentation_file, "page": page_number})
+        emit('my response', {"data": "sb joined"}, room=message['room'])
+        # emit('init presentation', {"json": presentation_file, "page": page_number})
+        emit('init presentation', {"json": "asa", "page": 2})
         return 1
     except Exception as e:
+        print(e)
         return 0
+
+
+@socketio.on('send answer', namespace='/presentation')
+def send_answer(message):
+    # do some things here
+    print(message)
+    emit('catch answer', {"answer": message['answer'], "page": message['page']}, room=message['room'])
 
 
 @socketio.on('leave', namespace='/presentation')
