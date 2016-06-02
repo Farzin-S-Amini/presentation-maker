@@ -124,6 +124,7 @@ class Session(db.Model):
     participants = relationship(
         'User',
         secondary='session_user_link')
+    answers = db.relationship('Answer', backref='answer', lazy='dynamic')
 
     def import_data(self, data,presenter_id,code):
         try:
@@ -140,3 +141,12 @@ class SessionUserLink(db.Model):
     __tablename__ = 'session_user_link'
     session_id = db.Column(db.Integer, db.ForeignKey('sessions.id'), primary_key=True)
     participant_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+
+
+class Answer(db.Model):
+    __tablename__ = 'answers'
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.Integer, db.ForeignKey('sessions.id'))
+    slide_num = db.Column(db.Integer)
+    audience_id = db.Column(db.Integer)
+    value = db.Column(db.String(256))
