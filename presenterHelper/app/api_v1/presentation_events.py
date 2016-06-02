@@ -70,8 +70,15 @@ def join(message):
         file = open(directory + "/presentation_" + str(pid))
         presentation_file = js.load(file)
         join_room(message['room'])
+
+        # print(message['room'])
+        # print(presentation_file)
+        # print(page_number)
+
         emit('my response', {"data": "sb joined"}, room=message['room'])
-        emit('init presentation', {"json": presentation_file, "page": page_number})
+
+        emit('init presentation', {"json": str(presentation_file), "page": page_number})
+        # print("ok")
         # emit('init presentation', {"json": "asa", "page": 2})
         return 1
     except Exception as e:
