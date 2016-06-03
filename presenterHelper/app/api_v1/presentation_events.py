@@ -12,13 +12,18 @@ from flask_socketio import emit, join_room, leave_room, \
 
 
 @socketio.on('change page', namespace='/presentation')
-def change_page(data, room_name):
-    print(data['page'])
-    session = Session.query.filter_by(code=room_name, is_active=True)
-    session.current_page = data['page']
-    db.session.commit()
-    emit('page changed', {'page': data['page']}, room=room_name)
-
+def change_page(data):
+    try:
+        print(data['page'])
+        session = Session.query.filter_by(code=data['room_name'], is_active=True)
+        session.current_page = data['page']
+        db.session.commit()
+        print(session.current_page)
+        emit('page changed', {'page': data['page']}, room=data['room_name'])
+        return 1
+    except Exception as e:
+        print(e)
+        return 0
 
 @socketio.on('end session', namespace='/presentation')
 def end_session(room_name):
@@ -62,21 +67,23 @@ def test_broadcast_message(message):
 def join(message):
     try:
         # get presentation json file using room
+
         session = Session.query.filter_by(code=message['room'], is_active=True).first()
         pid = session.presentation.id
         user_id = session.presenter_id
+        # page_number hamishe 0 barmigardune
         page_number = session.current_page
         directory = os.path.join(app.config['DATA_DIR'], "user_" + str(user_id))
         file = open(directory + "/presentation_" + str(pid))
         presentation_file = js.load(file)
         join_room(message['room'])
 
-        # print(message['room'])
-        # print(presentation_file)
-        # print(page_number)
+        print(message['room'])
+        print(presentation_file)
+        print(page_number)
+
 
         emit('my response', {"data": "sb joined"}, room=message['room'])
-
         emit('init presentation', {"json": str(presentation_file), "page": page_number})
         # print("ok")
         # emit('init presentation', {"json": "asa", "page": 2})
