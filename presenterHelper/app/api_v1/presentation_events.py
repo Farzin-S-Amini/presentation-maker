@@ -2,7 +2,7 @@
 
 from .. import socketio
 from . import app
-from ..models import Session
+from ..models import Session, Answer
 from .. import db
 import json as js
 import os
@@ -95,7 +95,11 @@ def join(message):
 
 @socketio.on('send answer', namespace='/presentation')
 def send_answer(message):
-    # do some things here
+    session = Session.query.get_or_404(message['session_id'])
+    answer = Answer(session=session)
+    answer.import_data(message)
+    db.session.add(answer)
+    db.session.commit()
     print(message)
     emit('catch answer', {"answer": message['answer'], "page": message['page']}, room=message['room'])
 

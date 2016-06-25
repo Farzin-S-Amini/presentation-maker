@@ -150,3 +150,12 @@ class Answer(db.Model):
     slide_num = db.Column(db.Integer)
     audience_id = db.Column(db.Integer)
     value = db.Column(db.String(256))
+
+    def import_data(self, data):
+        try:
+            self.audience_id = data['audience_id']
+            self.slide_num = data['page']
+            self.value = data['answer']
+        except KeyError as e:
+            raise ValidationError('Invalid customer: missing ' + e.args[0])
+        return self
