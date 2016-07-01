@@ -1,10 +1,11 @@
 import os
+import logging
 from app import create_app, db
 from app.models import User
 from app import socketio
 
-if __name__ == '__main__':
 
+def main1():
     app = create_app(os.environ.get('FLASK_CONFIG', 'development'))
 
     with app.app_context():
@@ -25,3 +26,8 @@ if __name__ == '__main__':
                 print(e)
 
     socketio.run(app, port=8000, debug=True)
+
+
+if __name__ == '__main__':
+    main1()
+

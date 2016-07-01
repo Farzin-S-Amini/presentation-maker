@@ -6,7 +6,9 @@ from ..auth import auth_token
 from ..models import Presentation, Session, User
 from ..decorators import json
 from flask import g, request
+from ..objectModels.SessionModel import SessionModel
 import string, random
+import json as js
 
 
 """
@@ -106,3 +108,32 @@ def join_session():
         session.participants.append(user)
         db.session.commit()
         return {'message': 'participant joined successfully'}, 201
+
+"""
+ @api {Get} /get_sessions/uid Request to get all sessions of a presenter
+ @apiName GetSessions
+ @apiGroup Session
+
+ @apiParam {Number} uid presenter id.
+
+
+ @apiSuccessExample {json} 201 Success-Response:
+ {
+ "current_page": 0, "is_active": true, "end_date": null, "presentation_name": "computer","name": "firstSession", "code": "8X5XV"
+ }
+
+
+ @apiError {json} 404 the User not found
+
+"""
+
+
+@api.route("/get_sessions/<int:uid>", methods=["GET"])
+@auth_token.login_required
+def get_sessions(uid):
+	if g.user:
+		session = Session.query.filter_by(presenter_id=uid).first()
+		p_name = Presentation.query.filter_by(id=session.presentation_id).first().name
+		session_model = SessionModel(session,p_name)
+		json_session = js.dumps(session_model.__dict__)
+		return json_session
