@@ -116,7 +116,7 @@ def create_app(config_name):
     @no_cache
     @json
     def get_auth_token():
-        return {'token': g.user.generate_auth_token()}
+        return {'token': g.user.generate_auth_token(),'user_id':g.user.user_id}
 
     socketio.init_app(app)
 
