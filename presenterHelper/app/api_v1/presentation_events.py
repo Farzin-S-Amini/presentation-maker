@@ -15,7 +15,7 @@ from flask_socketio import emit, join_room, leave_room, \
 def change_page(data):
     try:
         print(data['page'])
-        session = Session.query.filter_by(code=data['room_name'], is_active=True)
+        session = Session.query.filter_by(code=data['room_name'], is_active=True).first()
         session.current_page = data['page']
         db.session.commit()
         print(session.current_page)
@@ -28,7 +28,7 @@ def change_page(data):
 @socketio.on('end session', namespace='/presentation')
 def end_session(room_name):
     try:
-        session = Session.query.filter_by(code=room_name, is_active=True)
+        session = Session.query.filter_by(code=room_name, is_active=True).first()
         session.is_active = False
         db.session.commit()
 

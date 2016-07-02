@@ -46,7 +46,7 @@ def create_session():
         presentation = Presentation.query.get_or_404(pid)
         session = Session(presentation=presentation)
         code = generate_session_code()
-        session.import_data(req_data, pid, code)
+        session.import_data(req_data, user_id, code)
         db.session.add(session)
         db.session.commit()
         return {'session_code': code}, 200
