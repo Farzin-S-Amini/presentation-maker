@@ -231,9 +231,9 @@ define({ "api": [
     "groupTitle": "Session"
   },
   {
-    "type": "get",
+    "type": "Get",
     "url": "/get_sessions/uid",
-    "title": "Request to join a session",
+    "title": "Request to get all sessions of a presenter",
     "name": "GetSessions",
     "group": "Session",
     "parameter": {
@@ -243,7 +243,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "presenter_id",
+            "field": "uid",
             "description": "<p>presenter id.</p>"
           }
         ]
@@ -253,7 +253,7 @@ define({ "api": [
       "examples": [
         {
           "title": "201 Success-Response:",
-          "content": "{\n\t\"current_page\": 0, \"is_active\": true, \"end_date\": null, \"presentation_name\": \"computer\",\n\t\"name\": null, \"code\": \"8X5XV\"\n}",
+          "content": "[{\"presentation_name\": \"computer\", \"code\": \"8X5XV\", \"name\": null, \"is_active\": true, \"current_page\": 0, \"end_date\": null}, {\"presentation_name\": \"photoshop\", \"code\": \"QSE9S\", \"name\": null, \"is_active\": true, \"current_page\": 0, \"end_date\": null}]",
           "type": "json"
         }
       ]
@@ -749,5 +749,33 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "./app/api_v1/utils.py",
     "groupTitle": "Utils"
+  },
+  {
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "varname1",
+            "description": "<p>No type.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "varname2",
+            "description": "<p>With type.</p>"
+          }
+        ]
+      }
+    },
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "./doc/main.js",
+    "group": "_home_farzin_seProject_presentation_maker_presenterHelper_doc_main_js",
+    "groupTitle": "_home_farzin_seProject_presentation_maker_presenterHelper_doc_main_js",
+    "name": ""
   }
 ] });

@@ -118,9 +118,7 @@ def join_session():
 
 
  @apiSuccessExample {json} 201 Success-Response:
- {
- "current_page": 0, "is_active": true, "end_date": null, "presentation_name": "computer","name": "firstSession", "code": "8X5XV"
- }
+[{"presentation_name": "computer", "code": "8X5XV", "name": null, "is_active": true, "current_page": 0, "end_date": null}, {"presentation_name": "photoshop", "code": "QSE9S", "name": null, "is_active": true, "current_page": 0, "end_date": null}]
 
 
  @apiError {json} 404 the User not found
@@ -132,8 +130,11 @@ def join_session():
 @auth_token.login_required
 def get_sessions(uid):
 	if g.user:
-		session = Session.query.filter_by(presenter_id=uid).first()
-		p_name = Presentation.query.filter_by(id=session.presentation_id).first().name
-		session_model = SessionModel(session,p_name)
-		json_session = js.dumps(session_model.__dict__)
+		session = Session.query.filter_by(presenter_id=uid).all()
+		session_list = list()
+		for i in range(len(session)):
+			p_name = Presentation.query.filter_by(id=session[i].presentation_id).first().name
+			session_model = SessionModel(session[i], p_name)
+			session_list.append(session_model)
+		json_session = js.dumps([ob.__dict__ for ob in session_list])
 		return json_session
