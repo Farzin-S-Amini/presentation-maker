@@ -153,7 +153,7 @@ class Answer(db.Model):
 
     def import_data(self, data):
         try:
-            self.audience_id = data['audience_id']
+            self.audience_id = data['user_id']
             self.slide_num = data['page']
             self.value = data['answer']
         except KeyError as e:
