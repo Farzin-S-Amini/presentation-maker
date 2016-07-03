@@ -51,7 +51,7 @@ def upload_image():
             user_path = "user_"+ str(user_id)+"/"+f_name
             print(url_for('static', filename='img/'+user_path))
             img_url = url_for('static', filename='img/'+user_path)
-            path = "http://154.16.56.58:8000"+img_url
+            path = "http://154.16.156.58:8000"+img_url
             return js.dumps({'filename': path})
         else:
             return jsonify({"error": "file type not supported"}), 406
