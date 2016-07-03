@@ -59,7 +59,7 @@ def register():
 
     user = User(req_data['email'], req_data['password'], req_data['firstname'], req_data['lastname'],
                 req_data['is_audience'])
-
+    user.is_verified = True
     db.session.add(user)
     db.session.commit()
 
