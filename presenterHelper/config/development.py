@@ -14,6 +14,7 @@ SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:farzin@localhost/presentDb'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 DATA_DIR = file_path
+DATA_DIR2 =os.path.join(basedir,"../app/static/img" )
 
 ALLOWED_EXTENSIONS = set([ '.png', '.jpg', '.jpeg'])
 

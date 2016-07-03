@@ -1,11 +1,12 @@
 from . import api
 from . import app
 import uuid
-from flask import request, g, jsonify
+from flask import request, g, jsonify, url_for
 import os
 import json as js
 from ..decorators import json
 from ..auth import auth_token
+import os
 
 
 def allowed_file(extension):
@@ -43,11 +44,15 @@ def upload_image():
         extension = os.path.splitext(file.filename)[1]
         if file and allowed_file(extension):
             f_name = str(uuid.uuid4()) + extension
-            directory = os.path.join(app.config['DATA_DIR'], "user_" + str(user_id))
+            directory = os.path.join(app.config['DATA_DIR2'], "user_" + str(user_id))
             if not os.path.exists(directory):
                 os.mkdir(directory)
             file.save(os.path.join(directory, f_name))
-            return js.dumps({'filename': f_name})
+            user_path = "user_"+ str(user_id)+"/"+f_name
+            print(url_for('static', filename='img/'+user_path))
+            img_url = url_for('static', filename='img/'+user_path)
+            path = "http://154.16.56.58:8000"+img_url
+            return js.dumps({'filename': path})
         else:
             return jsonify({"error": "file type not supported"}), 406
 
