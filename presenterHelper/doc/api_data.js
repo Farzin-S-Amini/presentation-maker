@@ -253,7 +253,7 @@ define({ "api": [
       "examples": [
         {
           "title": "201 Success-Response:",
-          "content": "[{\"presentation_name\": \"computer\", \"code\": \"8X5XV\", \"name\": null, \"is_active\": true, \"current_page\": 0, \"end_date\": null}, {\"presentation_name\": \"photoshop\", \"code\": \"QSE9S\", \"name\": null, \"is_active\": true, \"current_page\": 0, \"end_date\": null}]",
+          "content": "[{\"presentation_name\": \"computer\", \"code\": \"8X5XV\", \"name\": null, \"is_active\": true, \"current_page\": 0, \"end_date\": null}, {\"presentation_name\": \"photoshop\", \"code\": \"QSE9S\", \"name\": null, \"is_active\": true, \"current_page\": 0, \"end_date\": null,  \"participant_size\": 0}]",
           "type": "json"
         }
       ]
