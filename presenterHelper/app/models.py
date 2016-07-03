@@ -120,7 +120,7 @@ class Session(db.Model):
     is_active = db.Column(db.BOOLEAN, default=True)
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    current_page = db.Column(db.Integer, default=0)
+    current_page = db.Column(db.Integer, default=-1)
     participants = relationship(
         'User',
         secondary='session_user_link')

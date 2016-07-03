@@ -95,7 +95,7 @@ def join(message):
 
 @socketio.on('send answer', namespace='/presentation')
 def send_answer(message):
-    session = Session.query.get_or_404(message['session_id'])
+    session = Session.query.filter_by(code=message['room'], is_active=True).first()
     answer = Answer(session=session)
     answer.import_data(message)
     db.session.add(answer)
