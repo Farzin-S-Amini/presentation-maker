@@ -124,7 +124,7 @@ class Session(db.Model):
     participants = relationship(
         'User',
         secondary='session_user_link')
-    answers = db.relationship('Answer', backref='answer', lazy='dynamic')
+    answers = db.relationship('Answer', backref='session', lazy='dynamic')
 
     def import_data(self, data,presenter_id,code):
         try:

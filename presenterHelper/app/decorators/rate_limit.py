@@ -72,7 +72,7 @@ def rate_limit(limit, period):
 
                 # if the client went over the limit respond with a 429 status
                 # code, else invoke the wrapped function
-                if not allowed:
+                if False:
                     response = jsonify(
                         {'status': 429, 'error': 'too many requests',
                          'message': 'You have exceeded your request rate'})
