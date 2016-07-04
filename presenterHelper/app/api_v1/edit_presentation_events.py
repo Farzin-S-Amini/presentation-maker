@@ -2,7 +2,7 @@
 
 from .. import socketio
 from . import app
-from flask import session, request
+from flask import session, request, url_for
 from flask_socketio import emit, join_room, leave_room, \
     close_room, rooms, disconnect
 import os
@@ -34,16 +34,34 @@ def update_presentation(json, user_id, presentation_id):
 
 @socketio.on('save image', namespace='/edit_presentation')
 def save_image(message):
-    image_data = re.sub('^data:image/png;base64,', '', message['data'])
-    image = Image.open(BytesIO(base64.b64decode(image_data)))
-    if image:
-        f_name = str(uuid.uuid4()) + ".png"
-        directory = os.path.join(app.config['DATA_DIR'], "user_" + str(1))
-        if not os.path.exists(directory):
-            os.mkdir(directory)
-        image.save(os.path.join(directory, f_name))
-        return {'data': f_name}
-        # emit('my response', {'data': f_name})
+	user_id = message['user_id']
+	image_data = re.sub('^data:image/png;base64,', '', message['data'])
+	image = Image.open(BytesIO(base64.b64decode(image_data)))
+	if image:
+		f_name = str(uuid.uuid4()) + ".png"
+		directory = os.path.join(app.config['DATA_DIR2'], "user_" + str(user_id))
+		if not os.path.exists(directory):
+			os.mkdir(directory)
+		image.save(os.path.join(directory, f_name))
+		user_path = "user_"+ str(user_id)+"/"+f_name
+		print(url_for('static', filename='img/'+user_path))
+		img_url = url_for('static', filename='img/'+user_path)
+		path = "http://154.16.156.58:8000"+img_url
+		return js.dumps({'filename': path})
+	else:
+		return jsonify({"error": "file type not supported"}), 406
+
+
+    # image_data = re.sub('^data:image/png;base64,', '', message['data'])
+    # image = Image.open(BytesIO(base64.b64decode(image_data)))
+    # if image:
+    #     f_name = str(uuid.uuid4()) + ".png"
+    #     directory = os.path.join(app.config['DATA_DIR'], "user_" + str(1))
+    #     if not os.path.exists(directory):
+    #         os.mkdir(directory)
+    #     image.save(os.path.join(directory, f_name))
+    #     return {'data': f_name}
+    #     emit('my response', {'data': f_name})
 
 
 #########################################################################################################
