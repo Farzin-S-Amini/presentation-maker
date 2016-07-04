@@ -112,7 +112,7 @@ def create_app(config_name):
     from .auth import auth
     @app.route('/get-auth-token')
     @auth.login_required
-    @rate_limit(1, 600)  # one call per 10 minute period
+   # @rate_limit(1, 600)  # one call per 10 minute period
     @no_cache
     @json
     def get_auth_token():
